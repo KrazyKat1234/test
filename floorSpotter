@@ -1,0 +1,82 @@
+import csv
+
+
+def group4(x):
+	if x/4 != x//4:
+		return(x//4+1)
+	else:
+		return(x//4)
+
+def choice():
+	pick = input('Type 1 for abcd, or type 2 for efgh \n>')
+	if pick == '1':
+		return('#,A,B,C,D')
+	elif pick =='2':
+		return('#,E,F,G,H')
+	else:
+		print("wrong pick")
+
+
+def get_program():
+	sourceCSV = input('What is the source CSV?\n>')
+	program = {}
+	with open(sourceCSV, newline='') as csvfile:
+		reader = csv.DictReader(csvfile)
+		for row in reader:
+			program[row['Official Class']] = []
+
+	with open(sourceCSV, newline='') as csvfile:
+		reader = csv.DictReader(csvfile)
+		previous=[]
+		for row in reader:
+			if previous == [[row['Student First Name'].split()[0],row['Student Last Name'],row['Official Class']]]:
+				pass
+			else:
+				program[row['Official Class']] += [[row['Student First Name'].split()[0],row['Student Last Name'],row['Official Class']]]
+			previous = [[row['Student First Name'].split()[0],row['Student Last Name'],row['Official Class']]]
+	return(program)
+
+
+
+
+
+def floor_spots(program):
+	chosen = choice()	
+	with open('floorspots.csv', 'w', newline ='') as csvfile:
+		thing = csv.writer(csvfile, delimiter=' ')
+				
+		for class_list in program:
+			rows = group4((len(program[class_list])))
+			thing.writerow('')
+
+			thing.writerow(',Class:'+class_list+',Count:'+str(len(program[class_list])))
+			thing.writerow(chosen)
+			row_count=1
+			group = []
+			for student in program[class_list]:
+				group.append(student[0][0:11]+'-'+student[1][0]+',')
+				
+				if len(group)==4:
+					
+					group.insert(0, str(row_count)+',')
+					thing.writerow(group)
+					row_count+=1
+					group = []
+				elif (len(program[class_list]))%4!=0:
+					if row_count == rows:
+						if len(group) == (len(program[class_list]))%4:
+							group.insert(0, str(row_count)+',')
+							thing.writerow(group)
+							
+							group = []
+
+
+				
+
+		
+
+			
+
+floor_spots(get_program())
+print('Created file floorspots.csv')
+			
